@@ -1,0 +1,11 @@
+---
+
+- include: plugins.2.yml
+  name: hello
+ # when: elasticsearch_1x_series == "False"
+  tags: [elasticsearch, elasticsearch-install]
+
+# the < 2.0 way
+- include: plugins.1.yml
+  when: elasticsearch_1x_series == "True"
+  tags: [elasticsearch, elasticsearch-install]

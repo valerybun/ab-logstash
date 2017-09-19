@@ -1,0 +1,36 @@
+---
+
+- name: configuration
+  hosts: ab-logstash
+  sudo: yes
+  roles:
+    - apt
+    - { role: java }
+    - timezone
+    - ntp_update
+    - role: monit
+      monit_daemon: 30
+      monit_enable_http: True
+      monit_eventqueue_slots: 101
+      monit_eventqueue_enable: True
+    - elasticsearch
+    - logstash
+    - ini
+ 
+  vars:
+#Elasticsearch plugin
+    elasticsearch_plugins:
+    - name: elasticsearch/elasticsearch-cloud-aws/2.4.2
+    - name: mobz/elasticsearch-head
+    - name: royrusso/elasticsearch-HQ/v1.0.0  
+#Timezone
+    timezone: Europe/Minsk
+#NTP
+    cron_tasks:
+      - name: Update times
+        special_time: daily
+        user: 'ubuntu'
+        job: "sudo ntpdate ntp.psn.ru"
+#JAVA
+    java_packages:
+       - openjdk-7-jdk
